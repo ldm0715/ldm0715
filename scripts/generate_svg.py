@@ -21,15 +21,26 @@ USER = os.environ.get("GH_USER", "ldm0715")
 TOKEN = os.environ.get("GITHUB_TOKEN", "").strip()
 OUT_DIR = os.environ.get("OUT_DIR", "assets")
 
-# 宣纸主题配色，与博客主题 xuanzhi 保持一致
-PAPER = "#FDF6EC"
-INK = "#2E4756"
-CLAY = "#C86B4A"
-BORDER = "#E8D9C5"
-MUTED = "#9A8C7A"
+# 极客风：等宽字体 + 终端绿点缀，无卡片底。文字配色靠内嵌的
+# prefers-color-scheme 规则跟随页面主题。已验证：宿主页面设了 color-scheme 时，
+# <img> 里 SVG 的媒体查询会跟着触发，而 GitHub 的深色主题正是这么设的。
+INK = "#1F2328"     # 主要文字
+MUTED = "#59636E"   # 次要文字
+ACCENT = "#1F883D"  # 终端绿点缀
+BORDER = "#D0D7DE"  # 描边与分割线
 FONT = (
-    "-apple-system,BlinkMacSystemFont,'Segoe UI','PingFang SC',"
-    "'Microsoft YaHei',Helvetica,Arial,sans-serif"
+    "ui-monospace,SFMono-Regular,'SF Mono',Menlo,Consolas,"
+    "'Liberation Mono',monospace"
+)
+
+# 深色主题下把上面几个颜色整体换掉
+DARK_STYLE = (
+    "<style>@media (prefers-color-scheme:dark){"
+    'text[fill="#1F2328"]{fill:#E6EDF3}'
+    'text[fill="#59636E"]{fill:#8B949E}'
+    'text[fill="#1F883D"]{fill:#3FB950}'
+    'line[stroke="#D0D7DE"]{stroke:#30363D}'
+    "}</style>"
 )
 
 # 生成型仓库（如 Hexo 博客的输出产物）会严重拉偏语言占比，不计入语言统计，
@@ -227,14 +238,7 @@ def compute_streak(days: list[tuple[str, int]]) -> tuple[int, int]:
 def svg_open(width: int, height: int) -> str:
     return (
         f'<svg xmlns="http://www.w3.org/2000/svg" width="{width}" height="{height}" '
-        f'viewBox="0 0 {width} {height}" role="img">'
-    )
-
-
-def card_background(width: int, height: int) -> str:
-    return (
-        f'<rect x="0.5" y="0.5" width="{width - 1}" height="{height - 1}" rx="14" '
-        f'fill="{PAPER}" stroke="{BORDER}"/>'
+        f'viewBox="0 0 {width} {height}" role="img">{DARK_STYLE}'
     )
 
 
@@ -255,8 +259,8 @@ def render_stats(data: dict) -> str:
         ("关注者", data["followers"]),
         ("近一年贡献", data["contributions"] if data["contributions"] is not None else "-"),
     ]
-    out = [svg_open(width, height), card_background(width, height)]
-    out.append(text(22, 38, "GitHub 统计", 14, CLAY, "700", spacing="1"))
+    out = [svg_open(width, height)]
+    out.append(text(22, 38, "GitHub 统计", 14, ACCENT, "700", spacing="1"))
     out.append(f'<line x1="22" y1="56" x2="{width - 22}" y2="56" stroke="{BORDER}"/>')
     for (label, value), cx in zip(tiles, (60, 160, 260, 360)):
         out.append(text(cx, 112, value, 26, INK, "700", anchor="middle"))
@@ -272,7 +276,7 @@ def arc_path(cx, cy, r, start, end, fill) -> str:
     y2 = cy + r * math.sin(math.radians(end))
     large = 1 if (end - start) > 180 else 0
     d = f"M {cx} {cy} L {x1:.2f} {y1:.2f} A {r} {r} 0 {large} 1 {x2:.2f} {y2:.2f} Z"
-    return f'<path d="{d}" fill="{fill}" stroke="{PAPER}" stroke-width="1.5"/>'
+    return f'<path d="{d}" fill="{fill}"/>'
 
 
 def render_pie(languages: list[tuple[str, int]]) -> str:
@@ -286,8 +290,8 @@ def render_pie(languages: list[tuple[str, int]]) -> str:
         slices.append(("其他", rest, "#C9BCA8"))
     total = sum(size for _, size, _ in slices) or 1
 
-    out = [svg_open(width, height), card_background(width, height)]
-    out.append(text(22, 38, "常用语言", 14, CLAY, "700", spacing="1"))
+    out = [svg_open(width, height)]
+    out.append(text(22, 38, "常用语言", 14, ACCENT, "700", spacing="1"))
     if len(slices) == 1:
         out.append(f'<circle cx="{cx}" cy="{cy}" r="{r}" fill="{slices[0][2]}"/>')
     else:
@@ -307,7 +311,7 @@ def render_pie(languages: list[tuple[str, int]]) -> str:
 
 
 def render_streak(data: dict) -> str:
-    width, height = 620, 150
+    width, height = 400, 150
     days = data["days"]
     if days:
         current, longest = compute_streak(days)
@@ -317,10 +321,10 @@ def render_streak(data: dict) -> str:
         current, longest, total, span = "-", "-", "-", ""
     columns = [("当前连续", current, "天"), ("最长连续", longest, "天"), ("近一年贡献", total, "次")]
 
-    out = [svg_open(width, height), card_background(width, height)]
+    out = [svg_open(width, height)]
     for (label, value, unit), x in zip(columns, (width * 0.22, width * 0.5, width * 0.78)):
         out.append(text(x, 54, label, 13, MUTED, anchor="middle", spacing="0.5"))
-        out.append(text(x, 96, value, 36, INK, "700", anchor="middle"))
+        out.append(text(x, 96, value, 32, INK, "700", anchor="middle"))
         out.append(text(x, 118, unit, 12.5, MUTED, anchor="middle"))
     for x in (width * 0.36, width * 0.64):
         out.append(f'<line x1="{x:.0f}" y1="40" x2="{x:.0f}" y2="112" stroke="{BORDER}"/>')
@@ -345,8 +349,8 @@ def render_tech_stack() -> str:
     """窄版，400px 宽，与统计卡同宽，手机上缩放后文字仍可读。"""
     width, height, pad = 400, 292, 22
     icon_size, gap, row_gap = 16, 14, 26
-    out = [svg_open(width, height), card_background(width, height)]
-    out.append(text(pad, 34, "技术栈", 14, CLAY, "700", spacing="1"))
+    out = [svg_open(width, height)]
+    out.append(text(pad, 34, "技术栈", 14, ACCENT, "700", spacing="1"))
     label_y = 58
     for index, (label, items) in enumerate(TECH_STACK):
         if index:
@@ -367,33 +371,11 @@ def render_tech_stack() -> str:
     return "\n".join(out)
 
 
-def render_tech_stack_wide() -> str:
-    """宽版，820px，桌面端一行一组，更紧凑。"""
-    width, height = 820, 268
-    icon_size = 18
-    out = [svg_open(width, height), card_background(width, height)]
-    out.append(text(28, 48, "技术栈", 15, CLAY, "700", spacing="1"))
-    for row, (label, items) in enumerate(TECH_STACK):
-        yc = 104 + row * 60
-        out.append(text(28, yc + 4.5, label, 12, MUTED))
-        x = 118.0
-        for name, slug, color in items:
-            out.append(icon_path(slug, x, yc - icon_size / 2, icon_size, color))
-            out.append(text(x + icon_size + 6, yc + 4.5, name, 12.5, INK))
-            x += icon_size + 6 + len(name) * 7.5 + 20
-        if row < len(TECH_STACK) - 1:
-            out.append(
-                f'<line x1="28" y1="{yc + 30}" x2="{width - 28}" y2="{yc + 30}" stroke="{BORDER}"/>'
-            )
-    out.append("</svg>")
-    return "\n".join(out)
-
-
 def star_icon(x: float, y: float, size: float) -> str:
     scale = size / 24.0
     return (
         f'<path transform="translate({x:.2f} {y:.2f}) scale({scale:.5f})" '
-        f'd="{STAR_PATH}" fill="{CLAY}"/>'
+        f'd="{STAR_PATH}" fill="{ACCENT}"/>'
     )
 
 
@@ -403,15 +385,16 @@ def repo_meta(meta: dict, repo: str) -> tuple[str, str, int]:
 
 
 def lang_badge(right: float, center_y: float, lang: str, color: str, size: float = 10.5) -> str:
-    """语言小徽章，右边界对齐到 right，垂直居中于 center_y。"""
-    text_w = len(lang) * 6.5
-    w, h = 36 + text_w, 19
+    """语言小徽章，右边界对齐到 right，垂直居中于 center_y。等宽字体每字符
+    约 0.6em，按此收紧留白，避免胶囊比文字宽出一大截。"""
+    text_w = len(lang) * size * 0.6
+    w, h = 26 + text_w, 18
     x, y = right - w, center_y - h / 2
     return (
         f'<rect x="{x:.1f}" y="{y:.1f}" width="{w:.1f}" height="{h}" rx="{h / 2}" '
-        f'fill="#F1E4D0" stroke="{BORDER}"/>'
-        f'<circle cx="{x + 16:.1f}" cy="{center_y:.1f}" r="3.5" fill="{color}"/>'
-        + text(x + 24, center_y + 3.8, lang, size, INK)
+        f'fill="#8B98A5" fill-opacity="0.18"/>'
+        f'<circle cx="{x + 11:.1f}" cy="{center_y:.1f}" r="3.2" fill="{color}"/>'
+        + text(x + 18, center_y + 3.8, lang, size, INK)
     )
 
 
@@ -419,8 +402,8 @@ def render_projects(meta: dict) -> str:
     """窄版，400px 宽，与统计卡同宽，手机上可读。"""
     width, pad, entry_h = 400, 22, 52
     height = 54 + len(FEATURED) * entry_h + 20
-    out = [svg_open(width, height), card_background(width, height)]
-    out.append(text(pad, 36, "精选项目", 14, CLAY, "700", spacing="1"))
+    out = [svg_open(width, height)]
+    out.append(text(pad, 36, "精选项目", 14, ACCENT, "700", spacing="1"))
     for index, (repo, desc) in enumerate(FEATURED):
         y = 54 + index * entry_h
         lang, color, stars = repo_meta(meta, repo)
@@ -431,33 +414,9 @@ def render_projects(meta: dict) -> str:
             )
         out.append(text(pad, y + 16, repo, 12.5, INK, "700"))
         out.append(star_icon(width - pad - 30, y + 6, 11))
-        out.append(text(width - pad, y + 16, stars, 11.5, CLAY, "700", anchor="end"))
+        out.append(text(width - pad, y + 16, stars, 11.5, ACCENT, "700", anchor="end"))
         out.append(text(pad, y + 38, desc, 11, MUTED))
         out.append(lang_badge(width - pad, y + 34, lang, color))
-    out.append("</svg>")
-    return "\n".join(out)
-
-
-def render_projects_wide(meta: dict) -> str:
-    """宽版，820px，两列三行。"""
-    width, pad, tile_w, tile_h, gap = 820, 28, 374, 76, 14
-    rows = (len(FEATURED) + 1) // 2
-    height = 62 + rows * tile_h + (rows - 1) * gap + pad
-    out = [svg_open(width, height), card_background(width, height)]
-    out.append(text(pad, 42, "精选项目", 15, CLAY, "700", spacing="1"))
-    for index, (repo, desc) in enumerate(FEATURED):
-        x = pad + (index % 2) * (tile_w + gap)
-        y = 62 + (index // 2) * (tile_h + gap)
-        lang, color, stars = repo_meta(meta, repo)
-        out.append(
-            f'<rect x="{x}" y="{y}" width="{tile_w}" height="{tile_h}" rx="10" '
-            f'fill="#FBF2E4" stroke="{BORDER}"/>'
-        )
-        out.append(text(x + 16, y + 30, repo, 13.5, INK, "700"))
-        out.append(star_icon(x + tile_w - 52, y + 20, 12))
-        out.append(text(x + tile_w - 34, y + 30, stars, 11.5, CLAY, "700"))
-        out.append(text(x + 16, y + 58, desc, 11.5, MUTED))
-        out.append(lang_badge(x + tile_w - 16, y + 53, lang, color, size=11))
     out.append("</svg>")
     return "\n".join(out)
 
@@ -478,9 +437,7 @@ def main() -> int:
         "languages.svg": render_pie(data["languages"]),
         "streak.svg": render_streak(data),
         "tech-stack.svg": render_tech_stack(),
-        "tech-stack-wide.svg": render_tech_stack_wide(),
         "projects.svg": render_projects(data["repos_meta"]),
-        "projects-wide.svg": render_projects_wide(data["repos_meta"]),
     }
     for name, content in cards.items():
         path = os.path.join(OUT_DIR, name)

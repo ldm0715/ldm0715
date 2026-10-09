@@ -20,8 +20,8 @@ jobs:
         with:
           github_user_name: ldm0715
           outputs: |
-            dist/github-snake.svg?color_snake=#2E4756&color_dots=#F1E7D6,#F0D7C4,#E3B79C,#D69070,#C86B4A
-            dist/github-snake-dark.svg?color_snake=#C86B4A&palette=github-dark
+            dist/github-snake.svg?color_snake=#1F883D&color_dots=#EBEDF0,#D0D7DE,#AFB8C1,#8C959F,#6E7781
+            dist/github-snake-dark.svg?color_snake=#3FB950&color_dots=#21262D,#30363D,#484F58,#6E7681,#8B949E
 
       - name: Push to output branch
         uses: crazy-max/ghaction-github-pages@v4
