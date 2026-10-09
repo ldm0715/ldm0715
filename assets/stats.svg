@@ -1,14 +1,13 @@
-<svg xmlns="http://www.w3.org/2000/svg" width="400" height="176" viewBox="0 0 400 176" role="img"><style>.ink{fill:#22333D}.muted{fill:#6B7B87}.accent{fill:#B85C38}.rule{stroke:#E3DACD;stroke-width:1}@media (prefers-color-scheme:dark){.ink{fill:#D6DEE6}.muted{fill:#8B98A5}.accent{fill:#E0916A}.rule{stroke:#30363D}}</style>
-<text x="66" y="52" class="ink" font-family="-apple-system,BlinkMacSystemFont,'Segoe UI','PingFang SC','Microsoft YaHei',Helvetica,Arial,sans-serif" font-size="28" font-weight="700" text-anchor="middle">8</text>
-<text x="66" y="76" class="muted" font-family="-apple-system,BlinkMacSystemFont,'Segoe UI','PingFang SC','Microsoft YaHei',Helvetica,Arial,sans-serif" font-size="11.5" font-weight="400" text-anchor="middle">总获星</text>
-<text x="200" y="52" class="ink" font-family="-apple-system,BlinkMacSystemFont,'Segoe UI','PingFang SC','Microsoft YaHei',Helvetica,Arial,sans-serif" font-size="28" font-weight="700" text-anchor="middle">15</text>
-<text x="200" y="76" class="muted" font-family="-apple-system,BlinkMacSystemFont,'Segoe UI','PingFang SC','Microsoft YaHei',Helvetica,Arial,sans-serif" font-size="11.5" font-weight="400" text-anchor="middle">公开仓库</text>
-<text x="334" y="52" class="ink" font-family="-apple-system,BlinkMacSystemFont,'Segoe UI','PingFang SC','Microsoft YaHei',Helvetica,Arial,sans-serif" font-size="28" font-weight="700" text-anchor="middle">3</text>
-<text x="334" y="76" class="muted" font-family="-apple-system,BlinkMacSystemFont,'Segoe UI','PingFang SC','Microsoft YaHei',Helvetica,Arial,sans-serif" font-size="11.5" font-weight="400" text-anchor="middle">关注者</text>
-<text x="66" y="126" class="ink" font-family="-apple-system,BlinkMacSystemFont,'Segoe UI','PingFang SC','Microsoft YaHei',Helvetica,Arial,sans-serif" font-size="28" font-weight="700" text-anchor="middle">599</text>
-<text x="66" y="150" class="muted" font-family="-apple-system,BlinkMacSystemFont,'Segoe UI','PingFang SC','Microsoft YaHei',Helvetica,Arial,sans-serif" font-size="11.5" font-weight="400" text-anchor="middle">近一年贡献</text>
-<text x="200" y="126" class="ink" font-family="-apple-system,BlinkMacSystemFont,'Segoe UI','PingFang SC','Microsoft YaHei',Helvetica,Arial,sans-serif" font-size="28" font-weight="700" text-anchor="middle">10</text>
-<text x="200" y="150" class="muted" font-family="-apple-system,BlinkMacSystemFont,'Segoe UI','PingFang SC','Microsoft YaHei',Helvetica,Arial,sans-serif" font-size="11.5" font-weight="400" text-anchor="middle">连续天数</text>
-<text x="334" y="126" class="ink" font-family="-apple-system,BlinkMacSystemFont,'Segoe UI','PingFang SC','Microsoft YaHei',Helvetica,Arial,sans-serif" font-size="28" font-weight="700" text-anchor="middle">26</text>
-<text x="334" y="150" class="muted" font-family="-apple-system,BlinkMacSystemFont,'Segoe UI','PingFang SC','Microsoft YaHei',Helvetica,Arial,sans-serif" font-size="11.5" font-weight="400" text-anchor="middle">最长连续</text>
+<svg xmlns="http://www.w3.org/2000/svg" width="400" height="180" viewBox="0 0 400 180" role="img">
+<rect x="0.5" y="0.5" width="399" height="179" rx="14" fill="#FDF6EC" stroke="#E8D9C5"/>
+<text x="22" y="38" font-family="-apple-system,BlinkMacSystemFont,'Segoe UI','PingFang SC','Microsoft YaHei',Helvetica,Arial,sans-serif" font-size="14" font-weight="700" fill="#C86B4A" text-anchor="start" letter-spacing="1">GitHub 统计</text>
+<line x1="22" y1="56" x2="378" y2="56" stroke="#E8D9C5"/>
+<text x="60" y="112" font-family="-apple-system,BlinkMacSystemFont,'Segoe UI','PingFang SC','Microsoft YaHei',Helvetica,Arial,sans-serif" font-size="26" font-weight="700" fill="#2E4756" text-anchor="middle">8</text>
+<text x="60" y="138" font-family="-apple-system,BlinkMacSystemFont,'Segoe UI','PingFang SC','Microsoft YaHei',Helvetica,Arial,sans-serif" font-size="12" font-weight="400" fill="#9A8C7A" text-anchor="middle">总获星</text>
+<text x="160" y="112" font-family="-apple-system,BlinkMacSystemFont,'Segoe UI','PingFang SC','Microsoft YaHei',Helvetica,Arial,sans-serif" font-size="26" font-weight="700" fill="#2E4756" text-anchor="middle">15</text>
+<text x="160" y="138" font-family="-apple-system,BlinkMacSystemFont,'Segoe UI','PingFang SC','Microsoft YaHei',Helvetica,Arial,sans-serif" font-size="12" font-weight="400" fill="#9A8C7A" text-anchor="middle">公开仓库</text>
+<text x="260" y="112" font-family="-apple-system,BlinkMacSystemFont,'Segoe UI','PingFang SC','Microsoft YaHei',Helvetica,Arial,sans-serif" font-size="26" font-weight="700" fill="#2E4756" text-anchor="middle">3</text>
+<text x="260" y="138" font-family="-apple-system,BlinkMacSystemFont,'Segoe UI','PingFang SC','Microsoft YaHei',Helvetica,Arial,sans-serif" font-size="12" font-weight="400" fill="#9A8C7A" text-anchor="middle">关注者</text>
+<text x="360" y="112" font-family="-apple-system,BlinkMacSystemFont,'Segoe UI','PingFang SC','Microsoft YaHei',Helvetica,Arial,sans-serif" font-size="26" font-weight="700" fill="#2E4756" text-anchor="middle">598</text>
+<text x="360" y="138" font-family="-apple-system,BlinkMacSystemFont,'Segoe UI','PingFang SC','Microsoft YaHei',Helvetica,Arial,sans-serif" font-size="12" font-weight="400" fill="#9A8C7A" text-anchor="middle">近一年贡献</text>
 </svg>
