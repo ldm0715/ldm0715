@@ -12,6 +12,7 @@ import html
 import json
 import math
 import os
+import re
 import sys
 import urllib.request
 from datetime import date
@@ -96,16 +97,6 @@ TECH_STACK = [
     ]),
 ]
 
-# 精选项目，格式为 (仓库名, 一句话简介)；语言与 star 数由 API 实时提供
-FEATURED = [
-    ("xuanzhi", "宣纸风格 Hugo 博客主题"),
-    ("fangclass_check_web", "方班研讨厅提问查询工具"),
-    ("emobox", "本地表情包管理器"),
-    ("anyswitch", "直连 IP 自动写入 hosts"),
-    ("bowen_music", "波点音乐第三方桌面客户端"),
-    ("HYB_farm_helper", "黑与白农场油猴助手脚本"),
-]
-
 # Material 星形图标路径（24x24 viewBox）
 STAR_PATH = "M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"
 
@@ -113,6 +104,16 @@ GRAPHQL_QUERY = """
 query ($login: String!) {
   user(login: $login) {
     followers { totalCount }
+    pinnedItems(first: 6, types: [REPOSITORY]) {
+      nodes {
+        ... on Repository {
+          name
+          description
+          stargazerCount
+          primaryLanguage { name color }
+        }
+      }
+    }
     contributionsCollection {
       contributionCalendar {
         totalContributions
@@ -174,14 +175,17 @@ def fetch_rest() -> dict:
         "contributions": None,
         "days": [],
         "languages": sorted(langs.items(), key=lambda kv: kv[1], reverse=True),
-        "repos_meta": {
-            r["name"]: {
-                "stars": r["stargazers_count"],
+        # REST 拿不到置顶，退化成 star 最多的前 6 个
+        "pinned": [
+            {
+                "name": r["name"],
+                "desc": (r.get("description") or "").strip(),
                 "language": r["language"] or "-",
                 "color": LANG_COLORS.get(r["language"], MUTED),
+                "stars": r["stargazers_count"],
             }
-            for r in repos
-        },
+            for r in sorted(repos, key=lambda x: x["stargazers_count"], reverse=True)[:6]
+        ],
     }
 
 
@@ -200,6 +204,18 @@ def normalize(user: dict) -> dict:
         for week in calendar["weeks"]
         for day in week["contributionDays"]
     ]
+    pinned_nodes = (user.get("pinnedItems") or {}).get("nodes") or []
+    pinned = [
+        {
+            "name": node["name"],
+            "desc": (node.get("description") or "").strip(),
+            "language": (node["primaryLanguage"] or {}).get("name", "-"),
+            "color": (node["primaryLanguage"] or {}).get("color") or MUTED,
+            "stars": node["stargazerCount"],
+        }
+        for node in pinned_nodes
+        if node
+    ]
     return {
         "repos": user["repositories"]["totalCount"],
         "stars": sum(n["stargazerCount"] for n in nodes),
@@ -207,14 +223,7 @@ def normalize(user: dict) -> dict:
         "contributions": calendar["totalContributions"],
         "days": days,
         "languages": sorted(langs.items(), key=lambda kv: kv[1], reverse=True),
-        "repos_meta": {
-            n["name"]: {
-                "stars": n["stargazerCount"],
-                "language": (n["primaryLanguage"] or {}).get("name", "-"),
-                "color": (n["primaryLanguage"] or {}).get("color") or MUTED,
-            }
-            for n in nodes
-        },
+        "pinned": pinned,
     }
 
 
@@ -371,16 +380,33 @@ def star_icon(x: float, y: float, size: float) -> str:
     )
 
 
-def repo_meta(meta: dict, repo: str) -> tuple[str, str, int]:
-    entry = meta.get(repo, {})
-    return entry.get("language") or "-", entry.get("color") or MUTED, entry.get("stars", 0)
+def text_width_est(value: str, size: float) -> float:
+    """等宽字体下估算文字宽度：中日韩 1em，其余约 0.6em。"""
+    units = 0.0
+    for ch in value:
+        units += 1.0 if ord(ch) > 0x2E80 else (0.3 if ch == " " else 0.6)
+    return units * size
+
+
+def fit_text(value: str, size: float, max_width: float) -> str:
+    """超过可用宽度就截断，末尾加省略号。"""
+    if text_width_est(value, size) <= max_width:
+        return value
+    kept = ""
+    for ch in value:
+        if text_width_est(kept + ch + "…", size) > max_width:
+            break
+        kept += ch
+    return kept + "…"
+
+
+def badge_width(lang: str, size: float = 10.5) -> float:
+    return 26 + text_width_est(lang, size)
 
 
 def lang_badge(right: float, center_y: float, lang: str, color: str, size: float = 10.5) -> str:
-    """语言小徽章，右边界对齐到 right，垂直居中于 center_y。等宽字体每字符
-    约 0.6em，按此收紧留白，避免胶囊比文字宽出一大截。"""
-    text_w = len(lang) * size * 0.6
-    w, h = 26 + text_w, 18
+    """语言小徽章，右边界对齐到 right，垂直居中于 center_y。"""
+    w, h = badge_width(lang, size), 18
     x, y = right - w, center_y - h / 2
     return (
         f'<rect x="{x:.1f}" y="{y:.1f}" width="{w:.1f}" height="{h}" rx="{h / 2}" '
@@ -390,23 +416,151 @@ def lang_badge(right: float, center_y: float, lang: str, color: str, size: float
     )
 
 
-def render_project_cards(meta: dict) -> dict[str, str]:
-    """每个项目一张小图（400x54）。左右留内边距，并排时两张之间自然有缝；
+def render_project_cards(pinned: list[dict]) -> dict[str, str]:
+    """每个置顶项目一张小图（400x62）。左右留内边距，并排时两张之间自然有缝；
     桌面一行放得下两张（800px），手机自动变一张。"""
     cards = {}
     width, height, pad = 400, 62, 9
     top, right = 5, width - pad
-    for repo, desc in FEATURED:
-        lang, color, stars = repo_meta(meta, repo)
+    for item in pinned:
+        name, desc = item["name"], item["desc"]
+        lang, color, stars = item["language"], item["color"], item["stars"]
+        # 简介的可用宽度要扣掉右侧语言徽章
+        desc_max = right - pad - badge_width(lang) - 12
         out = [svg_open(width, height)]
-        out.append(text(pad, top + 20, repo, 13, INK, "700"))
+        out.append(text(pad, top + 20, name, 13, INK, "700"))
         out.append(star_icon(right - 30, top + 10, 11))
         out.append(text(right, top + 20, stars, 11.5, ACCENT, "700", anchor="end"))
-        out.append(text(pad, top + 42, desc, 11, MUTED))
+        out.append(text(pad, top + 42, fit_text(desc, 11, desc_max), 11, MUTED))
         out.append(lang_badge(right, top + 38, lang, color))
         out.append("</svg>")
-        cards[repo] = "\n".join(out)
+        cards[name] = "\n".join(out)
     return cards
+
+
+# 宠物心情：几天没提交就依次变成 Okay / Hungry / Sick
+PET_MOODS = [("happy", "Happy"), ("content", "Okay"), ("hungry", "Hungry"), ("sick", "Sick")]
+
+
+def pet_state(days: list[tuple[str, int]]) -> tuple[str, int, int]:
+    """返回 (心情, 等级, 当前连续天数)。"""
+    if not days:
+        return "content", 1, 0
+    counts = [c for _, c in days]
+    gap = 0
+    for count in reversed(counts):
+        if count > 0:
+            break
+        gap += 1
+    if gap <= 1:
+        mood = "happy"
+    elif gap <= 3:
+        mood = "content"
+    elif gap <= 7:
+        mood = "hungry"
+    else:
+        mood = "sick"
+    streak, _ = compute_streak(days)
+    return mood, 1 + sum(counts) // 100, streak
+
+
+CLAWD_DIR = os.path.join(
+    os.path.dirname(os.path.dirname(os.path.abspath(__file__))), "assets", "clawd"
+)
+# 宠物的名字，显示在卡片上
+PET_NAME = "Clawd"
+# 心情 -> 使用哪个 Clawd 状态文件
+PET_STATES = {
+    "happy": "happy",
+    "content": "idle-living",
+    "hungry": "idle-low-battery",
+    "sick": "dizzy",
+}
+
+
+# 四个状态真实边界的并集（Chrome getBBox 量的），再留些余量：
+# happy(-7.5,-9.5,29,25.5) / idle-living(0,6,15,10) /
+# idle-low-battery(-0.6,0.1,16.2,15.9) / dizzy(0,-0.3,15,16.3)
+CLAWD_VIEW = "-13 -16 40 40"
+
+
+def clawd_svg(state: str, cx: float, cy: float, size: float) -> str:
+    """把 assets/clawd 下的状态图嵌进卡片，居中到 (cx, cy)，保留自带动画。"""
+    with open(os.path.join(CLAWD_DIR, f"{state}.svg"), encoding="utf-8") as handle:
+        raw = handle.read()
+    inner = raw[raw.index(">") + 1: raw.rindex("</svg>")]
+    return (
+        f'<svg x="{cx - size / 2:.1f}" y="{cy - size / 2:.1f}" '
+        f'width="{size}" height="{size}" viewBox="{CLAWD_VIEW}">{inner}</svg>'
+    )
+
+
+def render_pet(data: dict) -> str:
+    """Clawd 宠物：状态跟着提交活跃度变，全部自托管。"""
+    width, height = 340, 112
+    mood, level, streak = pet_state(data["days"])
+    label = dict(PET_MOODS)[mood]
+    total = data["contributions"] if data["contributions"] is not None else 0
+    recent = [c for _, c in data["days"]][-7:] if data["days"] else []
+    today = recent[-1] if recent else 0
+
+    pet_cx, pet_cy, pet_size = 42.0, 76.0, 76.0
+    name_y = pet_cy - pet_size / 2 - 11
+    name_w = text_width_est(PET_NAME, 10)
+    out = [
+        svg_open(width, height),
+        # 名字做成小名牌贴在宠物上方
+        f'<rect x="{pet_cx - name_w / 2 - 6:.1f}" y="{name_y - 9:.1f}" '
+        f'width="{name_w + 12:.1f}" height="18" rx="9" fill="{ACCENT}" fill-opacity="0.12"/>',
+        text(pet_cx, name_y + 3.5, PET_NAME, 10, ACCENT, anchor="middle"),
+        clawd_svg(PET_STATES[mood], pet_cx, pet_cy, pet_size),
+    ]
+    tx = 86
+    out.append(text(tx, 30, f"Lv {level} · {label}", 13, INK, "700"))
+    out.append(text(tx, 58, f"今日 {today} 次 · 连续 {streak} 天", 11, MUTED))
+    out.append(text(tx, 80, f"累计 {total} 次贡献", 11, MUTED))
+    levels = ["#EBEDF0", "#9EC5FE", "#58A6FF", "#0969DA"]
+    for i, count in enumerate(recent):
+        shade = levels[0] if count == 0 else levels[min(3, 1 + count // 3)]
+        out.append(
+            f'<rect x="{tx + i * 13}" y="92" width="10" height="15" rx="2" fill="{shade}"/>'
+        )
+    out.append("</svg>")
+    return "\n".join(out)
+
+
+
+
+README_PATH = os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), "README.md")
+TECH_MARKERS = ("<!-- TECH:START -->", "<!-- TECH:END -->")
+PROJECT_MARKERS = ("<!-- PROJECTS:START -->", "<!-- PROJECTS:END -->")
+
+
+def build_tech_html() -> str:
+    chunks = []
+    for label, items in TECH_STACK:
+        icons = " ".join(
+            f'<img src="./assets/tech/{slug}.svg" alt="{name}" />' for name, slug, _ in items
+        )
+        chunks.append(f"<sub>{label}</sub><br/>\n{icons}")
+    return "<br/><br/>\n".join(chunks)
+
+
+def build_projects_html(pinned: list[dict]) -> str:
+    return "\n".join(
+        f'<img src="./assets/projects/{item["name"]}.svg" alt="{item["name"]}" />'
+        for item in pinned
+    )
+
+
+def replace_block(text: str, markers: tuple[str, str], body: str) -> str:
+    """把标记之间的内容换成 body。找不到标记就原样返回。"""
+    start, end = markers
+    i = text.find(start)
+    j = text.find(end, i + len(start)) if i != -1 else -1
+    if i == -1 or j == -1:
+        return text
+    return f"{text[: i + len(start)]}\n{body}\n{text[j:]}"
 
 
 def main() -> int:
@@ -425,11 +579,12 @@ def main() -> int:
         "stats.svg": render_stats(data),
         "languages.svg": render_pie(data["languages"]),
         "streak.svg": render_streak(data),
+        "pet.svg": render_pet(data),
     }
     # 拆件类：技术栈和精选项目拆成一张张小图，由 HTML 负责折行
     groups = {
         "tech": render_tech_icons(),
-        "projects": render_project_cards(data["repos_meta"]),
+        "projects": render_project_cards(data["pinned"]),
     }
 
     for name, content in cards.items():
@@ -440,10 +595,26 @@ def main() -> int:
     for folder, items in groups.items():
         directory = os.path.join(OUT_DIR, folder)
         os.makedirs(directory, exist_ok=True)
+        # 清掉不再需要的旧图（比如取消置顶的项目），避免留成孤儿
+        for stale in sorted(os.listdir(directory)):
+            if stale.endswith(".svg") and stale[:-4] not in items:
+                os.remove(os.path.join(directory, stale))
+                print(f"删除 {directory}/{stale}")
         for key, content in items.items():
             with open(os.path.join(directory, f"{key}.svg"), "w", encoding="utf-8") as handle:
                 handle.write(content)
         print(f"写入 {directory}/ 共 {len(items)} 张")
+
+    # README 里技术栈与精选项目的图片清单也一并重写，置顶变了就跟着变
+    if os.path.exists(README_PATH):
+        with open(README_PATH, encoding="utf-8") as handle:
+            readme = handle.read()
+        updated = replace_block(readme, TECH_MARKERS, build_tech_html())
+        updated = replace_block(updated, PROJECT_MARKERS, build_projects_html(data["pinned"]))
+        if updated != readme:
+            with open(README_PATH, "w", encoding="utf-8") as handle:
+                handle.write(updated)
+            print(f"更新 {README_PATH}")
     print(f"生成于 {date.today().isoformat()}")
     return 0
 
