@@ -1,5 +1,5 @@
-<svg xmlns="http://www.w3.org/2000/svg" width="400" height="180" viewBox="0 0 400 180" role="img"><style>@media (prefers-color-scheme:dark){text[fill="#1F2328"]{fill:#E6EDF3}text[fill="#59636E"]{fill:#8B949E}text[fill="#1F883D"]{fill:#3FB950}line[stroke="#D0D7DE"]{stroke:#30363D}}</style>
-<text x="22" y="38" font-family="ui-monospace,SFMono-Regular,'SF Mono',Menlo,Consolas,'Liberation Mono',monospace" font-size="14" font-weight="700" fill="#1F883D" text-anchor="start" letter-spacing="1">常用语言</text>
+<svg xmlns="http://www.w3.org/2000/svg" width="400" height="180" viewBox="0 0 400 180" role="img"><style>@media (prefers-color-scheme:dark){text[fill="#1F2328"]{fill:#E6EDF3}text[fill="#59636E"]{fill:#8B949E}text[fill="#0969DA"]{fill:#58A6FF}line[stroke="#D0D7DE"]{stroke:#30363D}}</style>
+<text x="22" y="38" font-family="ui-monospace,SFMono-Regular,'SF Mono',Menlo,Consolas,'Liberation Mono',monospace" font-size="14" font-weight="700" fill="#0969DA" text-anchor="start" letter-spacing="1">常用语言</text>
 <path d="M 100 98 L 100.00 42.00 A 56 56 0 0 1 146.60 129.05 Z" fill="#178600"/>
 <path d="M 100 98 L 146.60 129.05 A 56 56 0 0 1 104.38 153.83 Z" fill="#3178C6"/>
 <path d="M 100 98 L 104.38 153.83 A 56 56 0 0 1 63.79 140.72 Z" fill="#3572A5"/>
