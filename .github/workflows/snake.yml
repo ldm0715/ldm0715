@@ -15,18 +15,35 @@ jobs:
   snake:
     runs-on: ubuntu-latest
     steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
       - name: Generate contribution snake
         uses: Platane/snk/svg-only@v3
         with:
           github_user_name: ldm0715
           outputs: |
             dist/github-snake.svg?color_snake=#0969DA&color_dots=#EBEDF0,#D0D7DE,#AFB8C1,#8C959F,#6E7781
-            dist/github-snake-dark.svg?color_snake=#58A6FF&color_dots=#21262D,#30363D,#484F58,#6E7681,#8B949E
 
-      - name: Push to output branch
-        uses: crazy-max/ghaction-github-pages@v4
-        with:
-          target_branch: output
-          build_dir: dist
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      # 生成到仓库里而不是单独分支，README 用相对路径引用，
+      # 这样图片走 github.com 而不是被墙的 raw.githubusercontent.com
+      - name: Add dark-mode override
+        run: python scripts/snake_dark.py
+
+      - name: Commit changes
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add assets/snake.svg
+          if git diff --staged --quiet; then
+            echo "蛇图无变化，跳过提交"
+          else
+            git commit -m "chore: update contribution snake"
+            git pull --rebase origin main
+            git push
+          fi

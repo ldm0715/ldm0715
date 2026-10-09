@@ -478,34 +478,42 @@ PET_STATES = {
 }
 
 
-# 四个状态真实边界的并集（Chrome getBBox 量的），再留些余量：
-# happy(-7.5,-9.5,29,25.5) / idle-living(0,6,15,10) /
-# idle-low-battery(-0.6,0.1,16.2,15.9) / dizzy(0,-0.3,15,16.3)
-CLAWD_VIEW = "-13 -16 40 40"
+# 各状态的真实边界（Chrome getBBox 量的）。原图在 viewBox 里只占底部一小块，
+# 所以按各自边界裁一个正方形出来，图形才会填满、位置才好预测。
+CLAWD_BOX = {
+    "happy": (-7.5, -9.5, 29.0, 25.5),
+    "idle-living": (0.0, 6.0, 15.0, 10.0),
+    "idle-low-battery": (-0.6, 0.1, 16.2, 15.9),
+    "dizzy": (0.0, -0.3, 15.0, 16.3),
+}
 
 
 def clawd_svg(state: str, cx: float, cy: float, size: float) -> str:
-    """把 assets/clawd 下的状态图嵌进卡片，居中到 (cx, cy)，保留自带动画。"""
+    """把 assets/clawd 下的状态图裁切、缩放到 size×size，居中到 (cx, cy)。"""
     with open(os.path.join(CLAWD_DIR, f"{state}.svg"), encoding="utf-8") as handle:
         raw = handle.read()
     inner = raw[raw.index(">") + 1: raw.rindex("</svg>")]
+    bx, by, bw, bh = CLAWD_BOX.get(state, (-12.0, -20.0, 40.0, 40.0))
+    side = max(bw, bh) * 1.35          # 留出动画摆动余量
+    vx, vy = bx + bw / 2 - side / 2, by + bh / 2 - side / 2
     return (
         f'<svg x="{cx - size / 2:.1f}" y="{cy - size / 2:.1f}" '
-        f'width="{size}" height="{size}" viewBox="{CLAWD_VIEW}">{inner}</svg>'
+        f'width="{size}" height="{size}" '
+        f'viewBox="{vx:.2f} {vy:.2f} {side:.2f} {side:.2f}">{inner}</svg>'
     )
 
 
 def render_pet(data: dict) -> str:
     """Clawd 宠物：状态跟着提交活跃度变，全部自托管。"""
-    width, height = 340, 112
+    width, height = 222, 112
     mood, level, streak = pet_state(data["days"])
     label = dict(PET_MOODS)[mood]
     total = data["contributions"] if data["contributions"] is not None else 0
     recent = [c for _, c in data["days"]][-7:] if data["days"] else []
     today = recent[-1] if recent else 0
 
-    pet_cx, pet_cy, pet_size = 42.0, 76.0, 76.0
-    name_y = pet_cy - pet_size / 2 - 11
+    pet_cx, pet_cy, pet_size = 40.0, 68.0, 64.0
+    name_y = pet_cy - pet_size / 2 - 12
     name_w = text_width_est(PET_NAME, 10)
     out = [
         svg_open(width, height),
@@ -515,7 +523,7 @@ def render_pet(data: dict) -> str:
         text(pet_cx, name_y + 3.5, PET_NAME, 10, ACCENT, anchor="middle"),
         clawd_svg(PET_STATES[mood], pet_cx, pet_cy, pet_size),
     ]
-    tx = 86
+    tx = 84
     out.append(text(tx, 30, f"Lv {level} · {label}", 13, INK, "700"))
     out.append(text(tx, 58, f"今日 {today} 次 · 连续 {streak} 天", 11, MUTED))
     out.append(text(tx, 80, f"累计 {total} 次贡献", 11, MUTED))
