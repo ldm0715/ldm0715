@@ -3,7 +3,7 @@
 <img width="100%" src="https://capsule-render.vercel.app/api?type=waving&color=0:2E4756,100:C86B4A&height=190&section=header&text=gcnanmu&fontSize=64&fontColor=FDF6EC&fontAlignY=38&animation=fadeIn&desc=Turning%20ideas%20into%20tools%20that%20actually%20run&descAlignY=58&descSize=16" alt="header" />
 
 <a href="https://github.com/ldm0715">
-  <img src="https://readme-typing-svg.demolab.com?font=Fira+Code&weight=600&size=22&pause=1000&color=C86B4A&center=true&vCenter=true&width=620&height=45&lines=Windows+desktop+apps+%7C+userscripts+%7C+Python+utilities;Go+%7C+C%23+%7C+Python+%7C+TypeScript+%7C+Dart+%7C+JavaScript" alt="Typing SVG" />
+  <img src="https://readme-typing-svg.demolab.com?font=Fira+Code&weight=600&size=22&pause=1000&color=C86B4A&center=true&vCenter=true&width=800&height=45&lines=Windows+desktop+apps+%7C+userscripts+%7C+Python+utilities;Go+%7C+C%23+%7C+Python+%7C+TypeScript+%7C+Dart+%7C+JavaScript" alt="Typing SVG" />
 </a>
 
 <br/>
@@ -52,7 +52,7 @@
 
 <img src="./assets/stats.svg" alt="stats" /> <img src="./assets/languages.svg" alt="languages" />
 
-<br/><br/>
+<br/>
 
 <img src="./assets/streak.svg" alt="streak" />
 
