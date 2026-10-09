@@ -1,0 +1,32 @@
+name: Generate snake
+
+on:
+  schedule:
+    # 每天 03:27 UTC 刷新一次
+    - cron: "27 3 * * *"
+  workflow_dispatch:
+  push:
+    branches: [main]
+
+permissions:
+  contents: write
+
+jobs:
+  snake:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Generate contribution snake
+        uses: Platane/snk/svg-only@v3
+        with:
+          github_user_name: ldm0715
+          outputs: |
+            dist/github-snake.svg?color_snake=#2E4756&color_dots=#F1E7D6,#F0D7C4,#E3B79C,#D69070,#C86B4A
+            dist/github-snake-dark.svg?color_snake=#C86B4A&palette=github-dark
+
+      - name: Push to output branch
+        uses: crazy-max/ghaction-github-pages@v4
+        with:
+          target_branch: output
+          build_dir: dist
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

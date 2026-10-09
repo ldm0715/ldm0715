@@ -1,0 +1,32 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="480" height="220" viewBox="0 0 480 220" role="img">
+<rect x="0.5" y="0.5" width="479" height="219" rx="14" fill="#FDF6EC" stroke="#E8D9C5"/>
+<text x="26" y="42" font-family="-apple-system,BlinkMacSystemFont,'Segoe UI','PingFang SC','Microsoft YaHei',Helvetica,Arial,sans-serif" font-size="15" font-weight="700" fill="#C86B4A" text-anchor="start" letter-spacing="1">常用语言</text>
+<path d="M 118 124 L 118.00 50.00 A 74 74 0 0 1 179.42 165.27 Z" fill="#178600" stroke="#FDF6EC" stroke-width="1.5"/>
+<path d="M 118 124 L 179.42 165.27 A 74 74 0 0 1 123.38 197.80 Z" fill="#3178C6" stroke="#FDF6EC" stroke-width="1.5"/>
+<path d="M 118 124 L 123.38 197.80 A 74 74 0 0 1 70.41 180.67 Z" fill="#3572A5" stroke="#FDF6EC" stroke-width="1.5"/>
+<path d="M 118 124 L 70.41 180.67 A 74 74 0 0 1 45.33 137.95 Z" fill="#00B4AB" stroke="#FDF6EC" stroke-width="1.5"/>
+<path d="M 118 124 L 45.33 137.95 A 74 74 0 0 1 50.15 94.47 Z" fill="#F1E05A" stroke="#FDF6EC" stroke-width="1.5"/>
+<path d="M 118 124 L 50.15 94.47 A 74 74 0 0 1 75.84 63.19 Z" fill="#DEA584" stroke="#FDF6EC" stroke-width="1.5"/>
+<path d="M 118 124 L 75.84 63.19 A 74 74 0 0 1 118.00 50.00 Z" fill="#C9BCA8" stroke="#FDF6EC" stroke-width="1.5"/>
+<rect x="238" y="55" width="12" height="12" rx="3" fill="#178600"/>
+<text x="258" y="66" font-family="-apple-system,BlinkMacSystemFont,'Segoe UI','PingFang SC','Microsoft YaHei',Helvetica,Arial,sans-serif" font-size="12.5" font-weight="400" fill="#2E4756" text-anchor="start">C#</text>
+<text x="452" y="66" font-family="-apple-system,BlinkMacSystemFont,'Segoe UI','PingFang SC','Microsoft YaHei',Helvetica,Arial,sans-serif" font-size="12.5" font-weight="400" fill="#9A8C7A" text-anchor="end">34.4%</text>
+<rect x="238" y="77" width="12" height="12" rx="3" fill="#3178C6"/>
+<text x="258" y="88" font-family="-apple-system,BlinkMacSystemFont,'Segoe UI','PingFang SC','Microsoft YaHei',Helvetica,Arial,sans-serif" font-size="12.5" font-weight="400" fill="#2E4756" text-anchor="start">TypeScript</text>
+<text x="452" y="88" font-family="-apple-system,BlinkMacSystemFont,'Segoe UI','PingFang SC','Microsoft YaHei',Helvetica,Arial,sans-serif" font-size="12.5" font-weight="400" fill="#9A8C7A" text-anchor="end">14.4%</text>
+<rect x="238" y="99" width="12" height="12" rx="3" fill="#3572A5"/>
+<text x="258" y="110" font-family="-apple-system,BlinkMacSystemFont,'Segoe UI','PingFang SC','Microsoft YaHei',Helvetica,Arial,sans-serif" font-size="12.5" font-weight="400" fill="#2E4756" text-anchor="start">Python</text>
+<text x="452" y="110" font-family="-apple-system,BlinkMacSystemFont,'Segoe UI','PingFang SC','Microsoft YaHei',Helvetica,Arial,sans-serif" font-size="12.5" font-weight="400" fill="#9A8C7A" text-anchor="end">12.3%</text>
+<rect x="238" y="121" width="12" height="12" rx="3" fill="#00B4AB"/>
+<text x="258" y="132" font-family="-apple-system,BlinkMacSystemFont,'Segoe UI','PingFang SC','Microsoft YaHei',Helvetica,Arial,sans-serif" font-size="12.5" font-weight="400" fill="#2E4756" text-anchor="start">Dart</text>
+<text x="452" y="132" font-family="-apple-system,BlinkMacSystemFont,'Segoe UI','PingFang SC','Microsoft YaHei',Helvetica,Arial,sans-serif" font-size="12.5" font-weight="400" fill="#9A8C7A" text-anchor="end">10.9%</text>
+<rect x="238" y="143" width="12" height="12" rx="3" fill="#F1E05A"/>
+<text x="258" y="154" font-family="-apple-system,BlinkMacSystemFont,'Segoe UI','PingFang SC','Microsoft YaHei',Helvetica,Arial,sans-serif" font-size="12.5" font-weight="400" fill="#2E4756" text-anchor="start">JavaScript</text>
+<text x="452" y="154" font-family="-apple-system,BlinkMacSystemFont,'Segoe UI','PingFang SC','Microsoft YaHei',Helvetica,Arial,sans-serif" font-size="12.5" font-weight="400" fill="#9A8C7A" text-anchor="end">9.6%</text>
+<rect x="238" y="165" width="12" height="12" rx="3" fill="#DEA584"/>
+<text x="258" y="176" font-family="-apple-system,BlinkMacSystemFont,'Segoe UI','PingFang SC','Microsoft YaHei',Helvetica,Arial,sans-serif" font-size="12.5" font-weight="400" fill="#2E4756" text-anchor="start">Rust</text>
+<text x="452" y="176" font-family="-apple-system,BlinkMacSystemFont,'Segoe UI','PingFang SC','Microsoft YaHei',Helvetica,Arial,sans-serif" font-size="12.5" font-weight="400" fill="#9A8C7A" text-anchor="end">8.8%</text>
+<rect x="238" y="187" width="12" height="12" rx="3" fill="#C9BCA8"/>
+<text x="258" y="198" font-family="-apple-system,BlinkMacSystemFont,'Segoe UI','PingFang SC','Microsoft YaHei',Helvetica,Arial,sans-serif" font-size="12.5" font-weight="400" fill="#2E4756" text-anchor="start">其他</text>
+<text x="452" y="198" font-family="-apple-system,BlinkMacSystemFont,'Segoe UI','PingFang SC','Microsoft YaHei',Helvetica,Arial,sans-serif" font-size="12.5" font-weight="400" fill="#9A8C7A" text-anchor="end">9.6%</text>
+</svg>
