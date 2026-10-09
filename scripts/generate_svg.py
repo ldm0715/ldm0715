@@ -54,7 +54,7 @@ LANG_COLORS = {
     "TypeScript": "#3178C6", "C#": "#178600", "Go": "#00ADD8",
     "Dart": "#00B4AB", "HTML": "#E34C26", "Java": "#B07219",
     "C++": "#F34B7D", "C": "#555555", "Shell": "#89E051",
-    "Rust": "#DEA584", "Vue": "#41B883", "Jupyter Notebook": "#DA5B0B",
+    "Rust": "#CE422B", "Vue": "#41B883", "Jupyter Notebook": "#DA5B0B",
     "PHP": "#4F5D95", "Kotlin": "#A97BFF", "Lua": "#000080",
     "Dockerfile": "#384D54", "Ruby": "#701516", "Swift": "#F05138",
     "TeX": "#3D6117", "Batchfile": "#C1F12E", "PowerShell": "#012456",
@@ -80,6 +80,7 @@ TECH_STACK = [
         ("JavaScript", "javascript", "#F7DF1E"),
         ("Dart", "dart", "#0175C2"),
         ("CSS", "css3", "#1572B6"),
+        ("Rust", "rust", "#CE422B"),
     ]),
     ("框架 / 工具", [
         ("Tauri v2", "tauri", "#24C8DB"),

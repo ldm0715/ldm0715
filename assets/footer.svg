@@ -10,12 +10,12 @@
         <style>
       .text {   font-size: 70px;   font-weight: 700;   font-family: -apple-system,BlinkMacSystemFont,Segoe UI,Helvetica,Arial,sans-serif,Apple Color Emoji,Segoe UI Emoji;  } .desc {   font-size: 20px;   font-weight: 500;   font-family: -apple-system,BlinkMacSystemFont,Segoe UI,Helvetica,Arial,sans-serif,Apple Color Emoji,Segoe UI Emoji;  } path {   transform: rotate(180deg);   transform-origin: 50% 50%;  } 
       .text, .desc {   animation: fadeIn 1.2s ease-in-out forwards;  } @keyframes fadeIn {   from {     opacity: 0;   }   to {     opacity: 1;   }  } 
-    </style>
+    @media (prefers-color-scheme:dark){path[fill="url(#linear)"]{fill:url(#linearDark)}}</style>
         <defs>
               <linearGradient id="linear" x1="0%" y1="0%" x2="100%" y2="0%">
                 <stop offset="0%" stop-color="#0D1117"/><stop offset="100%" stop-color="#161B22"/>
               </linearGradient>
-            </defs>
+            <linearGradient id="linearDark" x1="0%" y1="0%" x2="100%" y2="0%"><stop offset="0%" stop-color="#E6EDF3"/><stop offset="100%" stop-color="#8B949E"/></linearGradient></defs>
         
       <g transform="translate(427, 55) scale(1, 1) translate(-427, -55)">
         <path d="" fill="url(#linear)" opacity="0.4" >
