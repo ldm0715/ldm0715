@@ -45,10 +45,10 @@
 <div align="center">
 
 <!-- PROJECTS:START -->
-<img src="./assets/projects/bowen_music.svg" alt="bowen_music" />
-<img src="./assets/projects/emobox.svg" alt="emobox" />
-<img src="./assets/projects/BiliEmojiDD.svg" alt="BiliEmojiDD" />
-<img src="./assets/projects/fangclass_check_web.svg" alt="fangclass_check_web" />
+<a href="https://github.com/ldm0715/bowen_music"><img src="./assets/projects/bowen_music.svg" alt="bowen_music" /></a>
+<a href="https://github.com/ldm0715/emobox"><img src="./assets/projects/emobox.svg" alt="emobox" /></a>
+<a href="https://github.com/ldm0715/BiliEmojiDD"><img src="./assets/projects/BiliEmojiDD.svg" alt="BiliEmojiDD" /></a>
+<a href="https://github.com/ldm0715/fangclass_check_web"><img src="./assets/projects/fangclass_check_web.svg" alt="fangclass_check_web" /></a>
 <!-- PROJECTS:END -->
 
 <sub>自动读取你 GitHub 上置顶的仓库，star 数与语言由 Action 每日更新 · <a href="https://github.com/ldm0715?tab=repositories">完整列表 →</a></sub>

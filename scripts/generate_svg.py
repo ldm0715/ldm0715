@@ -555,8 +555,10 @@ def build_tech_html() -> str:
 
 
 def build_projects_html(pinned: list[dict]) -> str:
+    """每张项目卡包一层链接，点击直接进仓库而不是打开图片文件。"""
     return "\n".join(
-        f'<img src="./assets/projects/{item["name"]}.svg" alt="{item["name"]}" />'
+        f'<a href="https://github.com/{USER}/{item["name"]}">'
+        f'<img src="./assets/projects/{item["name"]}.svg" alt="{item["name"]}" /></a>'
         for item in pinned
     )
 
