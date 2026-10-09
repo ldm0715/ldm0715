@@ -41,5 +41,7 @@ jobs:
             echo "统计数据无变化，跳过提交"
           else
             git commit -m "chore: update profile stats"
+            # 推送前先拉取，避免手动提交造成远端领先时推送失败
+            git pull --rebase origin main
             git push
           fi
