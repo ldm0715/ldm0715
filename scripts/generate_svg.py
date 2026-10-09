@@ -50,6 +50,41 @@ LANG_COLORS = {
 }
 PALETTE = ["#C86B4A", "#2E4756", "#6B8E9F", "#B08968", "#7D8CA3", "#9C6644"]
 
+# 图标取自 simple-icons，路径数据固化在 icons.json，渲染时不再联网
+ICONS_PATH = os.path.join(os.path.dirname(os.path.abspath(__file__)), "icons.json")
+try:
+    with open(ICONS_PATH, encoding="utf-8") as _fh:
+        ICONS = json.load(_fh)
+except FileNotFoundError:
+    ICONS = {}
+
+# 技术栈卡片内容，手写维护，格式为 (显示名, 图标 slug, 品牌色)
+TECH_STACK = [
+    ("语言", [
+        ("Go", "go", "#00ADD8"),
+        ("C#", "csharp", "#239120"),
+        ("Python", "python", "#3776AB"),
+        ("TypeScript", "typescript", "#3178C6"),
+        ("JavaScript", "javascript", "#F7DF1E"),
+        ("Dart", "dart", "#0175C2"),
+        ("CSS", "css3", "#1572B6"),
+    ]),
+    ("框架 / 工具", [
+        ("Tauri v2", "tauri", "#24C8DB"),
+        ("WinUI 3", "microsoft", "#5E5E5E"),
+        ("Flutter", "flutter", "#02569B"),
+        ("Qt", "qt", "#41CD52"),
+        ("Hugo", "hugo", "#FF4088"),
+        ("Node.js", "nodedotjs", "#5FA04E"),
+        ("Tampermonkey", "tampermonkey", "#00485B"),
+    ]),
+    ("环境", [
+        ("Windows", "windows", "#0078D6"),
+        ("Linux", "linux", "#FCC624"),
+        ("Git", "git", "#F05032"),
+    ]),
+]
+
 GRAPHQL_QUERY = """
 query ($login: String!) {
   user(login: $login) {
@@ -184,7 +219,7 @@ def text(x, y, value, size, fill, weight="400", anchor="start", spacing=None) ->
 
 
 def render_stats(data: dict) -> str:
-    width, height = 480, 220
+    width, height = 400, 180
     tiles = [
         ("总获星", data["stars"]),
         ("公开仓库", data["repos"]),
@@ -192,11 +227,11 @@ def render_stats(data: dict) -> str:
         ("近一年贡献", data["contributions"] if data["contributions"] is not None else "-"),
     ]
     out = [svg_open(width, height), card_background(width, height)]
-    out.append(text(26, 42, "GitHub 统计", 15, CLAY, "700", spacing="1"))
-    for (label, value), (x, y) in zip(tiles, [(26, 70), (250, 70), (26, 146), (250, 146)]):
-        out.append(f'<rect x="{x}" y="{y}" width="4" height="44" rx="2" fill="{CLAY}"/>')
-        out.append(text(x + 16, y + 24, value, 26, INK, "700"))
-        out.append(text(x + 16, y + 46, label, 12.5, MUTED))
+    out.append(text(22, 38, "GitHub 统计", 14, CLAY, "700", spacing="1"))
+    out.append(f'<line x1="22" y1="56" x2="{width - 22}" y2="56" stroke="{BORDER}"/>')
+    for (label, value), cx in zip(tiles, (60, 160, 260, 360)):
+        out.append(text(cx, 112, value, 26, INK, "700", anchor="middle"))
+        out.append(text(cx, 138, label, 12, MUTED, anchor="middle"))
     out.append("</svg>")
     return "\n".join(out)
 
@@ -212,8 +247,8 @@ def arc_path(cx, cy, r, start, end, fill) -> str:
 
 
 def render_pie(languages: list[tuple[str, int]]) -> str:
-    width, height = 480, 220
-    cx, cy, r = 118, 124, 74
+    width, height = 400, 180
+    cx, cy, r = 100, 98, 56
     keep = languages[:6]
     rest = sum(size for _, size in languages[6:])
     slices = [(name, size, LANG_COLORS.get(name, PALETTE[i % len(PALETTE)]))
@@ -223,7 +258,7 @@ def render_pie(languages: list[tuple[str, int]]) -> str:
     total = sum(size for _, size, _ in slices) or 1
 
     out = [svg_open(width, height), card_background(width, height)]
-    out.append(text(26, 42, "常用语言", 15, CLAY, "700", spacing="1"))
+    out.append(text(22, 38, "常用语言", 14, CLAY, "700", spacing="1"))
     if len(slices) == 1:
         out.append(f'<circle cx="{cx}" cy="{cy}" r="{r}" fill="{slices[0][2]}"/>')
     else:
@@ -232,12 +267,12 @@ def render_pie(languages: list[tuple[str, int]]) -> str:
             sweep = size / total * 360.0
             out.append(arc_path(cx, cy, r, angle, angle + sweep, color))
             angle += sweep
-    y = 66
+    y = 62
     for name, size, color in slices:
-        out.append(f'<rect x="238" y="{y - 11}" width="12" height="12" rx="3" fill="{color}"/>')
-        out.append(text(258, y, name, 12.5, INK))
-        out.append(text(452, y, f"{size / total * 100:.1f}%", 12.5, MUTED, anchor="end"))
-        y += 22
+        out.append(f'<rect x="176" y="{y - 10}" width="11" height="11" rx="3" fill="{color}"/>')
+        out.append(text(195, y, name, 12, INK))
+        out.append(text(374, y, f"{size / total * 100:.1f}%", 12, MUTED, anchor="end"))
+        y += 17
     out.append("</svg>")
     return "\n".join(out)
 
@@ -266,6 +301,38 @@ def render_streak(data: dict) -> str:
     return "\n".join(out)
 
 
+def icon_path(slug: str, x: float, y: float, size: float, color: str) -> str:
+    """把 24x24 viewBox 的图标缩放到指定位置与尺寸。"""
+    if slug not in ICONS:
+        return f'<circle cx="{x + size / 2:.2f}" cy="{y + size / 2:.2f}" r="{size / 2:.2f}" fill="{color}"/>'
+    scale = size / 24.0
+    return (
+        f'<path transform="translate({x:.2f} {y:.2f}) scale({scale:.5f})" '
+        f'd="{ICONS[slug]}" fill="{color}"/>'
+    )
+
+
+def render_tech_stack() -> str:
+    width, height = 820, 268
+    icon_size = 18
+    out = [svg_open(width, height), card_background(width, height)]
+    out.append(text(28, 48, "技术栈", 15, CLAY, "700", spacing="1"))
+    for row, (label, items) in enumerate(TECH_STACK):
+        yc = 104 + row * 60
+        out.append(text(28, yc + 4.5, label, 12, MUTED))
+        x = 118.0
+        for name, slug, color in items:
+            out.append(icon_path(slug, x, yc - icon_size / 2, icon_size, color))
+            out.append(text(x + icon_size + 6, yc + 4.5, name, 12.5, INK))
+            x += icon_size + 6 + len(name) * 7.5 + 20
+        if row < len(TECH_STACK) - 1:
+            out.append(
+                f'<line x1="28" y1="{yc + 30}" x2="{width - 28}" y2="{yc + 30}" stroke="{BORDER}"/>'
+            )
+    out.append("</svg>")
+    return "\n".join(out)
+
+
 def main() -> int:
     data = None
     if TOKEN:
@@ -281,6 +348,7 @@ def main() -> int:
         "stats.svg": render_stats(data),
         "languages.svg": render_pie(data["languages"]),
         "streak.svg": render_streak(data),
+        "tech-stack.svg": render_tech_stack(),
     }
     for name, content in cards.items():
         path = os.path.join(OUT_DIR, name)
