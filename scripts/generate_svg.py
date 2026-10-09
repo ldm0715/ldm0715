@@ -85,6 +85,19 @@ TECH_STACK = [
     ]),
 ]
 
+# 精选项目，格式为 (仓库名, 一句话简介)；语言与 star 数由 API 实时提供
+FEATURED = [
+    ("xuanzhi", "宣纸风格 Hugo 博客主题"),
+    ("fangclass_check_web", "方班研讨厅提问查询工具"),
+    ("emobox", "本地表情包管理器"),
+    ("anyswitch", "直连 IP 自动写入 hosts"),
+    ("bowen_music", "波点音乐第三方桌面客户端"),
+    ("HYB_farm_helper", "黑与白农场油猴助手脚本"),
+]
+
+# Material 星形图标路径（24x24 viewBox）
+STAR_PATH = "M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"
+
 GRAPHQL_QUERY = """
 query ($login: String!) {
   user(login: $login) {
@@ -100,7 +113,7 @@ query ($login: String!) {
       nodes {
         name
         stargazerCount
-        forkCount
+        primaryLanguage { name color }
         languages(first: 10, orderBy: {field: SIZE, direction: DESC}) {
           edges { size node { name } }
         }
@@ -150,6 +163,14 @@ def fetch_rest() -> dict:
         "contributions": None,
         "days": [],
         "languages": sorted(langs.items(), key=lambda kv: kv[1], reverse=True),
+        "repos_meta": {
+            r["name"]: {
+                "stars": r["stargazers_count"],
+                "language": r["language"] or "-",
+                "color": LANG_COLORS.get(r["language"], MUTED),
+            }
+            for r in repos
+        },
     }
 
 
@@ -175,6 +196,14 @@ def normalize(user: dict) -> dict:
         "contributions": calendar["totalContributions"],
         "days": days,
         "languages": sorted(langs.items(), key=lambda kv: kv[1], reverse=True),
+        "repos_meta": {
+            n["name"]: {
+                "stars": n["stargazerCount"],
+                "language": (n["primaryLanguage"] or {}).get("name", "-"),
+                "color": (n["primaryLanguage"] or {}).get("color") or MUTED,
+            }
+            for n in nodes
+        },
     }
 
 
@@ -313,6 +342,33 @@ def icon_path(slug: str, x: float, y: float, size: float, color: str) -> str:
 
 
 def render_tech_stack() -> str:
+    """窄版，400px 宽，与统计卡同宽，手机上缩放后文字仍可读。"""
+    width, height, pad = 400, 292, 22
+    icon_size, gap, row_gap = 16, 14, 26
+    out = [svg_open(width, height), card_background(width, height)]
+    out.append(text(pad, 34, "技术栈", 14, CLAY, "700", spacing="1"))
+    label_y = 58
+    for index, (label, items) in enumerate(TECH_STACK):
+        if index:
+            out.append(
+                f'<line x1="{pad}" y1="{label_y - 22}" x2="{width - pad}" y2="{label_y - 22}" stroke="{BORDER}"/>'
+            )
+        out.append(text(pad, label_y, label, 11.5, MUTED))
+        x, row_y = float(pad), label_y + 24
+        for name, slug, color in items:
+            item_w = icon_size + 5 + len(name) * 7.2
+            if x + item_w > width - pad:
+                x, row_y = float(pad), row_y + row_gap
+            out.append(icon_path(slug, x, row_y - icon_size / 2, icon_size, color))
+            out.append(text(x + icon_size + 5, row_y + 4, name, 12, INK))
+            x += item_w + gap
+        label_y = row_y + 40
+    out.append("</svg>")
+    return "\n".join(out)
+
+
+def render_tech_stack_wide() -> str:
+    """宽版，820px，桌面端一行一组，更紧凑。"""
     width, height = 820, 268
     icon_size = 18
     out = [svg_open(width, height), card_background(width, height)]
@@ -333,6 +389,79 @@ def render_tech_stack() -> str:
     return "\n".join(out)
 
 
+def star_icon(x: float, y: float, size: float) -> str:
+    scale = size / 24.0
+    return (
+        f'<path transform="translate({x:.2f} {y:.2f}) scale({scale:.5f})" '
+        f'd="{STAR_PATH}" fill="{CLAY}"/>'
+    )
+
+
+def repo_meta(meta: dict, repo: str) -> tuple[str, str, int]:
+    entry = meta.get(repo, {})
+    return entry.get("language") or "-", entry.get("color") or MUTED, entry.get("stars", 0)
+
+
+def lang_badge(right: float, center_y: float, lang: str, color: str, size: float = 10.5) -> str:
+    """语言小徽章，右边界对齐到 right，垂直居中于 center_y。"""
+    text_w = len(lang) * 6.5
+    w, h = 36 + text_w, 19
+    x, y = right - w, center_y - h / 2
+    return (
+        f'<rect x="{x:.1f}" y="{y:.1f}" width="{w:.1f}" height="{h}" rx="{h / 2}" '
+        f'fill="#F1E4D0" stroke="{BORDER}"/>'
+        f'<circle cx="{x + 16:.1f}" cy="{center_y:.1f}" r="3.5" fill="{color}"/>'
+        + text(x + 24, center_y + 3.8, lang, size, INK)
+    )
+
+
+def render_projects(meta: dict) -> str:
+    """窄版，400px 宽，与统计卡同宽，手机上可读。"""
+    width, pad, entry_h = 400, 22, 52
+    height = 54 + len(FEATURED) * entry_h + 20
+    out = [svg_open(width, height), card_background(width, height)]
+    out.append(text(pad, 36, "精选项目", 14, CLAY, "700", spacing="1"))
+    for index, (repo, desc) in enumerate(FEATURED):
+        y = 54 + index * entry_h
+        lang, color, stars = repo_meta(meta, repo)
+        if index:
+            out.append(
+                f'<line x1="{pad}" y1="{y + entry_h - 7}" x2="{width - pad}" '
+                f'y2="{y + entry_h - 7}" stroke="{BORDER}"/>'
+            )
+        out.append(text(pad, y + 16, repo, 12.5, INK, "700"))
+        out.append(star_icon(width - pad - 30, y + 6, 11))
+        out.append(text(width - pad, y + 16, stars, 11.5, CLAY, "700", anchor="end"))
+        out.append(text(pad, y + 38, desc, 11, MUTED))
+        out.append(lang_badge(width - pad, y + 34, lang, color))
+    out.append("</svg>")
+    return "\n".join(out)
+
+
+def render_projects_wide(meta: dict) -> str:
+    """宽版，820px，两列三行。"""
+    width, pad, tile_w, tile_h, gap = 820, 28, 374, 76, 14
+    rows = (len(FEATURED) + 1) // 2
+    height = 62 + rows * tile_h + (rows - 1) * gap + pad
+    out = [svg_open(width, height), card_background(width, height)]
+    out.append(text(pad, 42, "精选项目", 15, CLAY, "700", spacing="1"))
+    for index, (repo, desc) in enumerate(FEATURED):
+        x = pad + (index % 2) * (tile_w + gap)
+        y = 62 + (index // 2) * (tile_h + gap)
+        lang, color, stars = repo_meta(meta, repo)
+        out.append(
+            f'<rect x="{x}" y="{y}" width="{tile_w}" height="{tile_h}" rx="10" '
+            f'fill="#FBF2E4" stroke="{BORDER}"/>'
+        )
+        out.append(text(x + 16, y + 30, repo, 13.5, INK, "700"))
+        out.append(star_icon(x + tile_w - 52, y + 20, 12))
+        out.append(text(x + tile_w - 34, y + 30, stars, 11.5, CLAY, "700"))
+        out.append(text(x + 16, y + 58, desc, 11.5, MUTED))
+        out.append(lang_badge(x + tile_w - 16, y + 53, lang, color, size=11))
+    out.append("</svg>")
+    return "\n".join(out)
+
+
 def main() -> int:
     data = None
     if TOKEN:
@@ -349,6 +478,9 @@ def main() -> int:
         "languages.svg": render_pie(data["languages"]),
         "streak.svg": render_streak(data),
         "tech-stack.svg": render_tech_stack(),
+        "tech-stack-wide.svg": render_tech_stack_wide(),
+        "projects.svg": render_projects(data["repos_meta"]),
+        "projects-wide.svg": render_projects_wide(data["repos_meta"]),
     }
     for name, content in cards.items():
         path = os.path.join(OUT_DIR, name)

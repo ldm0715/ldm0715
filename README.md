@@ -25,24 +25,25 @@
 
 <div align="center">
 
-<img src="./assets/tech-stack.svg" alt="tech stack" />
+<picture>
+  <source media="(min-width: 720px)" srcset="./assets/tech-stack-wide.svg" />
+  <img src="./assets/tech-stack.svg" alt="tech stack" />
+</picture>
 
 </div>
 
 ## 📌 精选项目
 
-| 项目 | 简介 | 语言 |
-| :--- | :--- | :---: |
-| **[xuanzhi](https://github.com/ldm0715/xuanzhi)** `★ 2` | 宣纸风格极简中文 Hugo 博客主题：暖纸底、稿纸格纹、霞鹜文楷 | `CSS` |
-| **[emobox](https://github.com/ldm0715/emobox)** | Windows 优先的本地表情包管理器：导入整理、秒速搜索、一键复制 | `TypeScript` |
-| **[anyswitch](https://github.com/ldm0715/anyswitch)** | 自动发现 anyrouter 直连 IP，TLS 校验后写入 hosts，漂移自动更新 | `Go` |
-| **[bowen_music](https://github.com/ldm0715/bowen_music)** | 非官方波点音乐第三方桌面客户端 | `C#` |
-| **[BiliEmojiDD](https://github.com/ldm0715/BiliEmojiDD)** | B 站表情包下载器：收藏集预览、GIF、视频内嵌播放、队列批量下载 | `Python` |
-| **[HYB_farm_helper](https://github.com/ldm0715/HYB_farm_helper)** `★ 1` | 黑与白农场的油猴脚本：收益排行、成熟时间、偷菜状态面板 | `JavaScript` |
-| **[hyb_farm_desktop](https://github.com/ldm0715/hyb_farm_desktop)** `★ 1` | 黑与白农场助手的 Flutter 桌面客户端 | `Dart` |
-| **[DIP_ToolBox](https://github.com/ldm0715/DIP_ToolBox)** `★ 1` | Qt 图像处理工具箱，覆盖数字图像处理经典算法 | `Python` |
+<div align="center">
 
-<sub>完整列表见 <a href="https://github.com/ldm0715?tab=repositories">Repositories</a> →</sub>
+<picture>
+  <source media="(min-width: 720px)" srcset="./assets/projects-wide.svg" />
+  <img src="./assets/projects.svg" alt="featured projects" />
+</picture>
+
+<sub>star 数与语言由 Action 每日更新 · <a href="https://github.com/ldm0715?tab=repositories">完整列表 →</a></sub>
+
+</div>
 
 ## 📊 GitHub 数据
 
