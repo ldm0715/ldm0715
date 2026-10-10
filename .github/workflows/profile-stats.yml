@@ -1,9 +1,9 @@
 name: Update profile stats
 
+# 每日刷新不依赖 GitHub 自带的 schedule：它的 cron 是 best-effort，
+# 会延迟数小时甚至整次跳过，无法保证「每天更新」。改由外部定时器调用
+# workflow_dispatch 触发，配置见文末。
 on:
-  schedule:
-    # 每天 03:17 UTC 刷新一次
-    - cron: "17 3 * * *"
   workflow_dispatch:
   push:
     branches: [main]
@@ -45,3 +45,22 @@ jobs:
             git pull --rebase origin main
             git push
           fi
+
+# 外部定时器配置（cron-job.org 或 Cloudflare Worker Cron）
+# 建两个 job，每天各发一次 workflow_dispatch：
+#
+#   POST https://api.github.com/repos/ldm0715/ldm0715/actions/workflows/profile-stats.yml/dispatches
+#   POST https://api.github.com/repos/ldm0715/ldm0715/actions/workflows/snake.yml/dispatches
+#
+# 请求体 {"ref":"main"}
+# 请求头
+#   Authorization: Bearer <PAT>
+#   Accept: application/vnd.github+json
+#   Content-Type: application/json
+#
+# PAT 用 fine-grained token：Repository access 只选 ldm0715/ldm0715，
+# 权限只开 Actions 的 Read and write，其余留空。返回 204 表示触发成功。
+# PAT 有有效期，到期要换新，否则刷新会静默停止。
+#
+# 建议时间：北京时间 23:50 左右。pet.svg 展示「今日 N 次」，
+# 贴着本地一天的末尾跑才能把当天活动统计完整。

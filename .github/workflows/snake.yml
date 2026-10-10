@@ -1,9 +1,7 @@
 name: Generate snake
 
+# 每日刷新由外部定时器调用 workflow_dispatch 触发，配置见 profile-stats.yml 文末
 on:
-  schedule:
-    # 每天 03:27 UTC 刷新一次
-    - cron: "27 3 * * *"
   workflow_dispatch:
   push:
     branches: [main]
@@ -30,8 +28,8 @@ jobs:
           outputs: |
             dist/github-snake.svg?color_snake=#0969DA&color_dots=#EBEDF0,#D0D7DE,#AFB8C1,#8C959F,#6E7781
 
-      # 生成到仓库里而不是单独分支，README 用相对路径引用，
-      # 这样图片走 github.com 而不是被墙的 raw.githubusercontent.com
+      # 生成到仓库里而不是单独分支，README 用相对路径引用，省掉一个分支
+      # 注意：相对路径最终仍会 302 跳到 raw.githubusercontent.com，绕不开该域名
       - name: Add dark-mode override
         run: python scripts/snake_dark.py
 
