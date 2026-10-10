@@ -57,8 +57,6 @@
 
 ## 📊 GitHub 数据
 
-<sub>数据由仓库内 <a href="./.github/workflows/profile-stats.yml">GitHub Action</a> 每日抓取并渲染为静态 SVG，不依赖任何第三方统计服务。</sub>
-
 <div align="center">
 
 <img src="./assets/stats.svg" alt="stats" /> <img src="./assets/languages.svg" alt="languages" />
@@ -66,6 +64,8 @@
 <br/>
 
 <img src="./assets/streak.svg" alt="streak" />
+
+<sub>数据由仓库内 <a href="./.github/workflows/profile-stats.yml">GitHub Action</a> 每日抓取并渲染为静态 SVG，不依赖任何第三方统计服务。</sub>
 
 </div>
 
