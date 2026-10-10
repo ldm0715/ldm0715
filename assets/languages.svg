@@ -1,31 +1,31 @@
 <svg xmlns="http://www.w3.org/2000/svg" width="400" height="180" viewBox="0 0 400 180" role="img"><style>@media (prefers-color-scheme:dark){text[fill="#1F2328"]{fill:#E6EDF3}text[fill="#59636E"]{fill:#8B949E}text[fill="#0969DA"]{fill:#58A6FF}line[stroke="#D0D7DE"]{stroke:#30363D}}</style>
 <text x="22" y="38" font-family="ui-monospace,SFMono-Regular,'SF Mono',Menlo,Consolas,'Liberation Mono',monospace" font-size="14" font-weight="700" fill="#0969DA" text-anchor="start" letter-spacing="1">常用语言</text>
-<path d="M 100 98 L 100.00 42.00 A 56 56 0 0 1 146.76 128.82 Z" fill="#178600"/>
-<path d="M 100 98 L 146.76 128.82 A 56 56 0 0 1 104.78 153.80 Z" fill="#3178C6"/>
-<path d="M 100 98 L 104.78 153.80 A 56 56 0 0 1 63.92 140.83 Z" fill="#3572A5"/>
-<path d="M 100 98 L 63.92 140.83 A 56 56 0 0 1 45.02 108.63 Z" fill="#00B4AB"/>
-<path d="M 100 98 L 45.02 108.63 A 56 56 0 0 1 48.65 75.65 Z" fill="#F1E05A"/>
-<path d="M 100 98 L 48.65 75.65 A 56 56 0 0 1 67.99 52.05 Z" fill="#CE422B"/>
-<path d="M 100 98 L 67.99 52.05 A 56 56 0 0 1 100.00 42.00 Z" fill="#C9BCA8"/>
+<path d="M 100 98 L 100.00 42.00 A 56 56 0 0 1 142.48 134.49 Z" fill="#178600"/>
+<path d="M 100 98 L 142.48 134.49 A 56 56 0 0 1 102.04 153.96 Z" fill="#3572A5"/>
+<path d="M 100 98 L 102.04 153.96 A 56 56 0 0 1 61.91 139.05 Z" fill="#3178C6"/>
+<path d="M 100 98 L 61.91 139.05 A 56 56 0 0 1 44.30 103.76 Z" fill="#00B4AB"/>
+<path d="M 100 98 L 44.30 103.76 A 56 56 0 0 1 51.80 69.49 Z" fill="#F1E05A"/>
+<path d="M 100 98 L 51.80 69.49 A 56 56 0 0 1 75.53 47.63 Z" fill="#CE422B"/>
+<path d="M 100 98 L 75.53 47.63 A 56 56 0 0 1 100.00 42.00 Z" fill="#C9BCA8"/>
 <rect x="176" y="52" width="11" height="11" rx="3" fill="#178600"/>
 <text x="195" y="62" font-family="ui-monospace,SFMono-Regular,'SF Mono',Menlo,Consolas,'Liberation Mono',monospace" font-size="12" font-weight="400" fill="#1F2328" text-anchor="start">C#</text>
-<text x="374" y="62" font-family="ui-monospace,SFMono-Regular,'SF Mono',Menlo,Consolas,'Liberation Mono',monospace" font-size="12" font-weight="400" fill="#59636E" text-anchor="end">34.3%</text>
-<rect x="176" y="69" width="11" height="11" rx="3" fill="#3178C6"/>
-<text x="195" y="79" font-family="ui-monospace,SFMono-Regular,'SF Mono',Menlo,Consolas,'Liberation Mono',monospace" font-size="12" font-weight="400" fill="#1F2328" text-anchor="start">TypeScript</text>
-<text x="374" y="79" font-family="ui-monospace,SFMono-Regular,'SF Mono',Menlo,Consolas,'Liberation Mono',monospace" font-size="12" font-weight="400" fill="#59636E" text-anchor="end">14.4%</text>
-<rect x="176" y="86" width="11" height="11" rx="3" fill="#3572A5"/>
-<text x="195" y="96" font-family="ui-monospace,SFMono-Regular,'SF Mono',Menlo,Consolas,'Liberation Mono',monospace" font-size="12" font-weight="400" fill="#1F2328" text-anchor="start">Python</text>
+<text x="374" y="62" font-family="ui-monospace,SFMono-Regular,'SF Mono',Menlo,Consolas,'Liberation Mono',monospace" font-size="12" font-weight="400" fill="#59636E" text-anchor="end">36.3%</text>
+<rect x="176" y="69" width="11" height="11" rx="3" fill="#3572A5"/>
+<text x="195" y="79" font-family="ui-monospace,SFMono-Regular,'SF Mono',Menlo,Consolas,'Liberation Mono',monospace" font-size="12" font-weight="400" fill="#1F2328" text-anchor="start">Python</text>
+<text x="374" y="79" font-family="ui-monospace,SFMono-Regular,'SF Mono',Menlo,Consolas,'Liberation Mono',monospace" font-size="12" font-weight="400" fill="#59636E" text-anchor="end">13.1%</text>
+<rect x="176" y="86" width="11" height="11" rx="3" fill="#3178C6"/>
+<text x="195" y="96" font-family="ui-monospace,SFMono-Regular,'SF Mono',Menlo,Consolas,'Liberation Mono',monospace" font-size="12" font-weight="400" fill="#1F2328" text-anchor="start">TypeScript</text>
 <text x="374" y="96" font-family="ui-monospace,SFMono-Regular,'SF Mono',Menlo,Consolas,'Liberation Mono',monospace" font-size="12" font-weight="400" fill="#59636E" text-anchor="end">12.5%</text>
 <rect x="176" y="103" width="11" height="11" rx="3" fill="#00B4AB"/>
 <text x="195" y="113" font-family="ui-monospace,SFMono-Regular,'SF Mono',Menlo,Consolas,'Liberation Mono',monospace" font-size="12" font-weight="400" fill="#1F2328" text-anchor="start">Dart</text>
-<text x="374" y="113" font-family="ui-monospace,SFMono-Regular,'SF Mono',Menlo,Consolas,'Liberation Mono',monospace" font-size="12" font-weight="400" fill="#59636E" text-anchor="end">10.8%</text>
+<text x="374" y="113" font-family="ui-monospace,SFMono-Regular,'SF Mono',Menlo,Consolas,'Liberation Mono',monospace" font-size="12" font-weight="400" fill="#59636E" text-anchor="end">11.5%</text>
 <rect x="176" y="120" width="11" height="11" rx="3" fill="#F1E05A"/>
 <text x="195" y="130" font-family="ui-monospace,SFMono-Regular,'SF Mono',Menlo,Consolas,'Liberation Mono',monospace" font-size="12" font-weight="400" fill="#1F2328" text-anchor="start">JavaScript</text>
-<text x="374" y="130" font-family="ui-monospace,SFMono-Regular,'SF Mono',Menlo,Consolas,'Liberation Mono',monospace" font-size="12" font-weight="400" fill="#59636E" text-anchor="end">9.6%</text>
+<text x="374" y="130" font-family="ui-monospace,SFMono-Regular,'SF Mono',Menlo,Consolas,'Liberation Mono',monospace" font-size="12" font-weight="400" fill="#59636E" text-anchor="end">10.1%</text>
 <rect x="176" y="137" width="11" height="11" rx="3" fill="#CE422B"/>
 <text x="195" y="147" font-family="ui-monospace,SFMono-Regular,'SF Mono',Menlo,Consolas,'Liberation Mono',monospace" font-size="12" font-weight="400" fill="#1F2328" text-anchor="start">Rust</text>
-<text x="374" y="147" font-family="ui-monospace,SFMono-Regular,'SF Mono',Menlo,Consolas,'Liberation Mono',monospace" font-size="12" font-weight="400" fill="#59636E" text-anchor="end">8.8%</text>
+<text x="374" y="147" font-family="ui-monospace,SFMono-Regular,'SF Mono',Menlo,Consolas,'Liberation Mono',monospace" font-size="12" font-weight="400" fill="#59636E" text-anchor="end">9.3%</text>
 <rect x="176" y="154" width="11" height="11" rx="3" fill="#C9BCA8"/>
 <text x="195" y="164" font-family="ui-monospace,SFMono-Regular,'SF Mono',Menlo,Consolas,'Liberation Mono',monospace" font-size="12" font-weight="400" fill="#1F2328" text-anchor="start">其他</text>
-<text x="374" y="164" font-family="ui-monospace,SFMono-Regular,'SF Mono',Menlo,Consolas,'Liberation Mono',monospace" font-size="12" font-weight="400" fill="#59636E" text-anchor="end">9.7%</text>
+<text x="374" y="164" font-family="ui-monospace,SFMono-Regular,'SF Mono',Menlo,Consolas,'Liberation Mono',monospace" font-size="12" font-weight="400" fill="#59636E" text-anchor="end">7.2%</text>
 </svg>
