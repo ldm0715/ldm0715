@@ -15,7 +15,7 @@ import os
 import re
 import sys
 import urllib.request
-from datetime import date
+from datetime import date, timedelta
 
 API = "https://api.github.com"
 USER = os.environ.get("GH_USER", "ldm0715")
@@ -339,7 +339,9 @@ def render_streak(data: dict) -> str:
     if days:
         current, longest = compute_streak(days)
         total = data["contributions"]
-        span = f"{days[0][0]} - {days[-1][0]}"
+        # 固定文案。写具体的起止日期的话末端就是当天，每天都会产生 diff，
+        # 逼着 workflow 每天都提交一条数据其实没变的记录。
+        span = "最近一年"
     else:
         current, longest, total, span = "-", "-", "-", ""
     columns = [("当前连续", current, "天"), ("最长连续", longest, "天"), ("近一年贡献", total, "次")]
@@ -524,14 +526,27 @@ def clawd_svg(state: str, cx: float, cy: float, size: float) -> str:
     )
 
 
+def week_slice(days: list[tuple[str, int]]) -> list[int]:
+    """本周（周一至周日）每天的提交数，缺的补 0。
+
+    用自然周而不是「最近 7 天」：滚动窗口每天往后挪一格，即使没提交也会
+    产生 diff；固定到周一起算则只在真有提交或跨周时才变。
+    """
+    if not days:
+        return [0] * 7
+    counts = dict(days)
+    latest = date.fromisoformat(days[-1][0])
+    monday = latest - timedelta(days=latest.weekday())
+    return [counts.get((monday + timedelta(days=i)).isoformat(), 0) for i in range(7)]
+
+
 def render_pet(data: dict) -> str:
     """Clawd 宠物：状态跟着提交活跃度变，全部自托管。"""
     width, height = 222, 112
     mood, level, streak = pet_state(data["days"])
     label = dict(PET_MOODS)[mood]
     total = data["contributions"] if data["contributions"] is not None else 0
-    recent = [c for _, c in data["days"]][-7:] if data["days"] else []
-    today = recent[-1] if recent else 0
+    week = week_slice(data["days"])
 
     pet_cx, pet_cy, pet_size = 40.0, 68.0, 64.0
     name_y = pet_cy - pet_size / 2 - 12
@@ -546,10 +561,10 @@ def render_pet(data: dict) -> str:
     ]
     tx = 84
     out.append(text(tx, 30, f"Lv {level} · {label}", 13, INK, "700"))
-    out.append(text(tx, 58, f"今日 {today} 次 · 连续 {streak} 天", 11, MUTED))
+    out.append(text(tx, 58, f"本周 {sum(week)} 次 · 连续 {streak} 天", 11, MUTED))
     out.append(text(tx, 80, f"累计 {total} 次贡献", 11, MUTED))
     levels = ["#EBEDF0", "#9EC5FE", "#58A6FF", "#0969DA"]
-    for i, count in enumerate(recent):
+    for i, count in enumerate(week):
         shade = levels[0] if count == 0 else levels[min(3, 1 + count // 3)]
         out.append(
             f'<rect x="{tx + i * 13}" y="92" width="10" height="15" rx="2" fill="{shade}"/>'
