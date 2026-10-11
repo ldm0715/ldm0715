@@ -31,9 +31,11 @@
 
 <!-- TECH:START -->
 <sub>语言</sub><br/>
-<img src="./assets/tech/go.svg" alt="Go" /> <img src="./assets/tech/csharp.svg" alt="C#" /> <img src="./assets/tech/python.svg" alt="Python" /> <img src="./assets/tech/typescript.svg" alt="TypeScript" /> <img src="./assets/tech/javascript.svg" alt="JavaScript" /> <img src="./assets/tech/dart.svg" alt="Dart" /> <img src="./assets/tech/css3.svg" alt="CSS" /> <img src="./assets/tech/rust.svg" alt="Rust" /><br/><br/>
+<img src="./assets/tech/go.svg" alt="Go" /> <img src="./assets/tech/csharp.svg" alt="C#" /> <img src="./assets/tech/python.svg" alt="Python" /> <img src="./assets/tech/typescript.svg" alt="TypeScript" /> <img src="./assets/tech/javascript.svg" alt="JavaScript" /> <img src="./assets/tech/dart.svg" alt="Dart" /> <img src="./assets/tech/css3.svg" alt="CSS" /> <img src="./assets/tech/rust.svg" alt="Rust" /> <img src="./assets/tech/kotlin.svg" alt="Kotlin" /><br/><br/>
 <sub>框架 / 工具</sub><br/>
-<img src="./assets/tech/tauri.svg" alt="Tauri v2" /> <img src="./assets/tech/microsoft.svg" alt="WinUI 3" /> <img src="./assets/tech/flutter.svg" alt="Flutter" /> <img src="./assets/tech/qt.svg" alt="Qt" /> <img src="./assets/tech/hugo.svg" alt="Hugo" /> <img src="./assets/tech/nodedotjs.svg" alt="Node.js" /> <img src="./assets/tech/tampermonkey.svg" alt="Tampermonkey" /><br/><br/>
+<img src="./assets/tech/tauri.svg" alt="Tauri v2" /> <img src="./assets/tech/microsoft.svg" alt="WinUI 3" /> <img src="./assets/tech/flutter.svg" alt="Flutter" /> <img src="./assets/tech/qt.svg" alt="Qt" /> <img src="./assets/tech/jetpackcompose.svg" alt="Jetpack Compose" /> <img src="./assets/tech/hugo.svg" alt="Hugo" /> <img src="./assets/tech/tampermonkey.svg" alt="Tampermonkey" /><br/><br/>
+<sub>Agent</sub><br/>
+<img src="./assets/tech/claudecode.svg" alt="Claude Code" /> <img src="./assets/tech/codex.svg" alt="Codex" /> <img src="./assets/tech/pi.svg" alt="Pi" /> <img src="./assets/tech/deepseek.svg" alt="DeepSeek Harness" /><br/><br/>
 <sub>环境</sub><br/>
 <img src="./assets/tech/windows.svg" alt="Windows" /> <img src="./assets/tech/linux.svg" alt="Linux" /> <img src="./assets/tech/git.svg" alt="Git" />
 <!-- TECH:END -->

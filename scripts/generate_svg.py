@@ -62,7 +62,8 @@ LANG_COLORS = {
 }
 PALETTE = ["#C86B4A", "#2E4756", "#6B8E9F", "#B08968", "#7D8CA3", "#9C6644"]
 
-# 图标取自 simple-icons，路径数据固化在 icons.json，渲染时不再联网
+# 图标路径数据固化在 icons.json，渲染时不再联网。
+# 多数取自 simple-icons；codex 取自 lobe-icons（simple-icons 已移除 OpenAI 相关图标）
 ICONS_PATH = os.path.join(os.path.dirname(os.path.abspath(__file__)), "icons.json")
 try:
     with open(ICONS_PATH, encoding="utf-8") as _fh:
@@ -81,15 +82,22 @@ TECH_STACK = [
         ("Dart", "dart", "#0175C2"),
         ("CSS", "css3", "#1572B6"),
         ("Rust", "rust", "#CE422B"),
+        ("Kotlin", "kotlin", "#7F52FF"),
     ]),
     ("框架 / 工具", [
         ("Tauri v2", "tauri", "#24C8DB"),
         ("WinUI 3", "microsoft", "#5E5E5E"),
         ("Flutter", "flutter", "#02569B"),
         ("Qt", "qt", "#41CD52"),
+        ("Jetpack Compose", "jetpackcompose", "#4285F4"),
         ("Hugo", "hugo", "#FF4088"),
-        ("Node.js", "nodedotjs", "#5FA04E"),
         ("Tampermonkey", "tampermonkey", "#00485B"),
+    ]),
+    ("Agent", [
+        ("Claude Code", "claudecode", "#D97757"),
+        ("Codex", "codex", "#000000"),
+        ("Pi", "pi", "#000000"),
+        ("DeepSeek Harness", "deepseek", "#5786FE"),
     ]),
     ("环境", [
         ("Windows", "windows", "#0078D6"),
@@ -97,6 +105,11 @@ TECH_STACK = [
         ("Git", "git", "#F05032"),
     ]),
 ]
+
+# 纯黑品牌色的图标在深色主题下会隐形，渲染时给这类图标补一条 @media 覆盖规则。
+# 深色值取品牌自己的官方用色（pi.dev favicon 里写的就是 #F6F6F6）。
+# 注意：规则只注入到该徽章自己的 SVG 文档里，不影响 pet.svg 等其它用到纯黑的图。
+DARK_ICON_FILL = {"#000000": "#F6F6F6"}
 
 # Material 星形图标路径（24x24 viewBox）
 STAR_PATH = "M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"
@@ -364,8 +377,15 @@ def render_tech_icons() -> dict[str, str]:
         for name, slug, color in items:
             width = pad * 2 + icon + gap + len(name) * size * 0.6
             yc = height / 2
+            dark = DARK_ICON_FILL.get(color)
+            patch = (
+                "<style>@media (prefers-color-scheme:dark){"
+                f'path[fill="{color}"]{{fill:{dark}}}'
+                "}</style>"
+            ) if dark else ""
             icons[slug] = (
                 svg_open(int(round(width)), height)
+                + patch
                 + icon_path(slug, pad, yc - icon / 2, icon, color)
                 + text(pad + icon + gap, yc + 4.5, name, size, INK)
                 + "</svg>"
