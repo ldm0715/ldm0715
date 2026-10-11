@@ -3,6 +3,9 @@ name: Update profile stats
 # 每日刷新不依赖 GitHub 自带的 schedule：它的 cron 是 best-effort，
 # 会延迟数小时甚至整次跳过，无法保证「每天更新」。改由外部定时器调用
 # workflow_dispatch 触发，配置见文末。
+#
+# 卡片和蛇图放在同一个 job 里顺序跑，末尾只提交一次。拆成两个 workflow 时
+# 每次刷新会产生两条提交，而且两者同时 push 会撞非快进。
 on:
   workflow_dispatch:
   push:
@@ -32,13 +35,27 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: python scripts/generate_svg.py
 
+      - name: Generate contribution snake
+        uses: Platane/snk/svg-only@v3
+        with:
+          github_user_name: ldm0715
+          outputs: |
+            dist/github-snake.svg?color_snake=#0969DA&color_dots=#EBEDF0,#D0D7DE,#AFB8C1,#8C959F,#6E7781
+
+      # 生成到仓库里而不是单独分支，README 用相对路径引用，省掉一个分支
+      # 注意：相对路径最终仍会 302 跳到 raw.githubusercontent.com，绕不开该域名
+      - name: Add dark-mode override
+        run: python scripts/snake_dark.py
+
       - name: Commit changes
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
           git add assets README.md
+          # 渲染结果和上次提交逐字节相同时跳过提交。定时任务照样每天跑、
+          # 每天拿最新数据重渲染，只是没有新数据时不留下一条空提交。
           if git diff --staged --quiet; then
-            echo "统计数据无变化，跳过提交"
+            echo "渲染结果无变化，跳过提交"
           else
             git commit -m "chore: update profile stats"
             # 推送前先拉取，避免手动提交造成远端领先时推送失败
@@ -47,10 +64,10 @@ jobs:
           fi
 
 # 外部定时器配置（cron-job.org 或 Cloudflare Worker Cron）
-# 建两个 job，每天各发一次 workflow_dispatch：
+# 只需要一个 job，每天发一次 workflow_dispatch。蛇图已并入本 workflow，
+# 原先那个 dispatch snake.yml 的 job 要删掉，否则会每天收到 404。
 #
 #   POST https://api.github.com/repos/ldm0715/ldm0715/actions/workflows/profile-stats.yml/dispatches
-#   POST https://api.github.com/repos/ldm0715/ldm0715/actions/workflows/snake.yml/dispatches
 #
 # 请求体 {"ref":"main"}
 # 请求头
@@ -62,5 +79,4 @@ jobs:
 # 权限只开 Actions 的 Read and write，其余留空。返回 204 表示触发成功。
 # PAT 有有效期，到期要换新，否则刷新会静默停止。
 #
-# 建议时间：北京时间 23:50 左右。pet.svg 展示「今日 N 次」，
-# 贴着本地一天的末尾跑才能把当天活动统计完整。
+# 建议时间：北京时间 23:50 左右，贴着本地一天末尾跑，当天活动统计最完整。
