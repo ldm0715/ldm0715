@@ -1,12 +1,12 @@
 <svg xmlns="http://www.w3.org/2000/svg" width="400" height="180" viewBox="0 0 400 180" role="img"><style>@media (prefers-color-scheme:dark){text[fill="#1F2328"]{fill:#E6EDF3}text[fill="#59636E"]{fill:#8B949E}text[fill="#0969DA"]{fill:#58A6FF}line[stroke="#D0D7DE"]{stroke:#30363D}}</style>
 <text x="22" y="38" font-family="ui-monospace,SFMono-Regular,'SF Mono',Menlo,Consolas,'Liberation Mono',monospace" font-size="14" font-weight="700" fill="#0969DA" text-anchor="start" letter-spacing="1">常用语言</text>
-<path d="M 100 98 L 100.00 42.00 A 56 56 0 0 1 129.39 145.67 Z" fill="#178600"/>
-<path d="M 100 98 L 129.39 145.67 A 56 56 0 0 1 88.26 152.76 Z" fill="#3572A5"/>
-<path d="M 100 98 L 88.26 152.76 A 56 56 0 0 1 55.13 131.51 Z" fill="#3178C6"/>
-<path d="M 100 98 L 55.13 131.51 A 56 56 0 0 1 44.01 96.72 Z" fill="#00B4AB"/>
-<path d="M 100 98 L 44.01 96.72 A 56 56 0 0 1 54.39 65.50 Z" fill="#F1E05A"/>
-<path d="M 100 98 L 54.39 65.50 A 56 56 0 0 1 77.55 46.70 Z" fill="#CE422B"/>
-<path d="M 100 98 L 77.55 46.70 A 56 56 0 0 1 100.00 42.00 Z" fill="#C9BCA8"/>
+<path d="M 100 98 L 100.00 42.00 A 56 56 0 0 1 129.36 145.69 Z" fill="#178600"/>
+<path d="M 100 98 L 129.36 145.69 A 56 56 0 0 1 88.24 152.75 Z" fill="#3572A5"/>
+<path d="M 100 98 L 88.24 152.75 A 56 56 0 0 1 55.12 131.49 Z" fill="#3178C6"/>
+<path d="M 100 98 L 55.12 131.49 A 56 56 0 0 1 44.01 96.71 Z" fill="#00B4AB"/>
+<path d="M 100 98 L 44.01 96.71 A 56 56 0 0 1 54.40 65.50 Z" fill="#F1E05A"/>
+<path d="M 100 98 L 54.40 65.50 A 56 56 0 0 1 77.56 46.69 Z" fill="#CE422B"/>
+<path d="M 100 98 L 77.56 46.69 A 56 56 0 0 1 100.00 42.00 Z" fill="#C9BCA8"/>
 <rect x="176" y="52" width="11" height="11" rx="3" fill="#178600"/>
 <text x="195" y="62" font-family="ui-monospace,SFMono-Regular,'SF Mono',Menlo,Consolas,'Liberation Mono',monospace" font-size="12" font-weight="400" fill="#1F2328" text-anchor="start">C#</text>
 <text x="374" y="62" font-family="ui-monospace,SFMono-Regular,'SF Mono',Menlo,Consolas,'Liberation Mono',monospace" font-size="12" font-weight="400" fill="#59636E" text-anchor="end">41.2%</text>
